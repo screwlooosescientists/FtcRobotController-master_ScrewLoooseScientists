@@ -97,6 +97,8 @@ public class AutonomousCenterstage extends LinearOpMode {
         // Code after start is pressed------------------------------------------------------------------------------------
 
 
+
+
             while(!isStopRequested()) {
                 Position TeamEllementPos = Cam1.GetTfodLocation(Cam1.HighestRecon());
                 telemetry.addData("pos X: ", TeamEllementPos.x);

@@ -24,6 +24,9 @@ public class Drivetrain extends Robot  {
    public static double driveKi = 0;
    public static double driveKd = 0;
 
+   float P = 0, I = 0, D = 0;
+    public float Fl = 0, Fr = 0, Bl = 0, Br = 0;
+
    //imu angles
   public YawPitchRollAngles robotOrientation;
 
@@ -35,7 +38,7 @@ public class Drivetrain extends Robot  {
     //robot pose vars
     float lastDistance;
     float distance;
-    float lastHeading;
+    public double prevOrient;
 
     public float wheelDiameter, GearRatio; // for the driven wheels
 
@@ -122,19 +125,23 @@ public class Drivetrain extends Robot  {
        distance = (float)Math.sqrt(deltaX * deltaX + deltaY * deltaY);
 
         // calculates the PID values for the scaling of the motorspeed to ensure that the robot obtains its target Pose acurately
-       float P = (float)driveKp * distance;
-       float I =+ (float)driveKi * deltaDistance + deltaTime;
-       float D = (float)driveKd * deltaDistance / deltaTime;
+        P = (float)driveKp * distance;
+        I = I + (float)driveKi * deltaDistance + deltaTime;
+        D = (float)driveKd * deltaDistance / deltaTime;
 
         // adds values to get unscaled robot values
         //TODO add a rotation function
-       float Fl = (transformtDy + transformtDx) * (P + I + D);  // Fl = front left
-       float Bl = (-transformtDy - transformtDx) * (P + I + D); // Bl = back left
-       float Fr = (transformtDy + transformtDx) * (P + I + D);  // Fr = front right
-       float Br = (transformtDy - transformtDx) * (P + I + D);  // Br = bakc left
+         Fl = -(-transformtDy + transformtDx) * (P + I + D);  // Fl = front left
+        Bl = -(-transformtDy - transformtDx) * (P + I + D); // Bl = back left
+        Fr = -(-transformtDy - transformtDx) * (P + I + D);  // Fr = front right
+        Br = (transformtDy + transformtDx) * (P + I + D);  // Br = bakc left
     
        //Normalizeses the motorvalues to stay between -1 and 1 and asign them to the motors
        float denominator = Math.max(Math.abs(Fl), Math.max(Math.abs(Bl), Math.max(Math.abs(Fr), Math.max( Math.abs(Br), 1f))));
+
+
+
+
        Lfront.setPower(Fl);
        Lback.setPower(Bl);
        Rfront.setPower(Fr);
@@ -161,15 +168,15 @@ public class Drivetrain extends Robot  {
 
     void getEncoderDeltas()
     {   // function for getting the delta values from the encoders used for odometry
-        double currentX1 = encoderX1.getCurrentPosition();
+        double currentX1 = encoderX1.getCurrentPosition() * Math.PI * wheelDiameter / odometryDiameter;
         deltaX1 = currentX1 - oldX1;
         oldX1 = currentX1;
 
-        double currentX2 = encoderX2.getCurrentPosition();
+        double currentX2 = -encoderX2.getCurrentPosition() * Math.PI * wheelDiameter / odometryDiameter;
         deltaX2 = currentX2 - oldX2;
         oldX2 = currentX2;
 
-        double currentY = encoderY.getCurrentPosition();
+        double currentY = encoderY.getCurrentPosition()  * Math.PI * wheelDiameter / odometryDiameter;
         deltaY = currentY - oldY;
         oldY = currentY;
     }
@@ -187,13 +194,21 @@ public class Drivetrain extends Robot  {
        return robotOrientation.getYaw(AngleUnit.RADIANS);
     }
 
+    public double getDeltaOrientation(double curretnOrientation)
+    {
+
+        double deltaOrien = curretnOrientation - prevOrient;
+        prevOrient = curretnOrientation;
+        return  deltaOrien;
+    }
+
     public void getPosition()
     {
         getEncoderDeltas(); // cals the function to retrieve new encoder data
 
         //get delta robot position
-        double dRobotx = (deltaX1 + deltaX2) / 2;
-        double dRoboty = deltaY - (horizontalEncoderOfset * getOrientation());
+        double dRobotx = -(deltaX1 + deltaX2) / 2;
+        double dRoboty = deltaY - (horizontalEncoderOfset * getDeltaOrientation(getOrientation()));
 
         //transform robot Pose to field Pose
         double dFieldX = dRobotx * Math.cos(getOrientation()) - -dRoboty * Math.sin(getOrientation());
