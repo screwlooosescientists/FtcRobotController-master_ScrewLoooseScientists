@@ -110,6 +110,12 @@ public class Drivetrain extends Robot  {
     public void DriveToPoint(Node Target)
     {   // get data needed for calculations
 
+        deltaTime = (float) timer.milliseconds() - lastTime;
+        float deltaDistance = distance - lastDistance;
+
+
+        //gets delta time
+        lastTime = (float) timer.milliseconds();
         /*
 
         deltaTime = (float) timer.milliseconds() - lastTime;    // get delta time
