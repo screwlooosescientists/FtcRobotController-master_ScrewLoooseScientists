@@ -109,6 +109,9 @@ public class Drivetrain extends Robot  {
 
     public void DriveToPoint(Node Target)
     {   // get data needed for calculations
+
+        /*
+
         deltaTime = (float) timer.milliseconds() - lastTime;    // get delta time
         float deltaDistance = distance - lastDistance;          // gets the delta distance to the target Pose
         float deltaX = Target.X - (float) RobotPositionX;        //gets the X distance to the target Pose
@@ -149,6 +152,11 @@ public class Drivetrain extends Robot  {
 
         //gets delta time
         lastTime = (float) timer.milliseconds();
+
+         */
+
+
+
     }
 
     public void followPath(Node[] path, float pathAcuracy, float orientation)

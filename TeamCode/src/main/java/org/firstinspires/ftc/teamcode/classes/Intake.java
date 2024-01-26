@@ -65,10 +65,10 @@ public class Intake extends Robot{
 
     public void PixelReleaseControl(boolean ReleaseButtonState)
     {
-        if (ReleaseButtonState)
-            PixelRelease.setPosition(0.5);
+        if (!ReleaseButtonState)
+            PixelRelease.setPosition(1);
         else
-            PixelRelease.setPosition(0);
+            PixelRelease.setPosition(0.5);
     }
 
 
