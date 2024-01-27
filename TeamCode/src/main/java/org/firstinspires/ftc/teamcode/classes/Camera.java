@@ -67,7 +67,7 @@ public class Camera extends Robot{
 
                 // Use setModelAssetName() if the TF Model is built in as an asset.
                 // Use setModelFileName() if you have downloaded a custom team model to the Robot Controller.
-                //.setModelAssetName(TFOD_MODEL_ASSET)
+                .setModelAssetName("vision.tflite")
                 //.setModelFileName(TFOD_MODEL_FILE)
 
                 //.setModelLabels(LABELS)

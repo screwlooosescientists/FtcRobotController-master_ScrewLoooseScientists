@@ -41,6 +41,7 @@ public class Hardware {
     // create sensors
     public static IMU imu;
     public static TouchSensor ArmLimit;
+    public static TouchSensor SliderLimit;
     public static ColorSensor PixelDetector;
 
     // create cameras and visual portal
@@ -75,7 +76,8 @@ public class Hardware {
         PlaneRelease = hwmap.get(Servo.class, "PlaneRelease");  //Expension hub Servo Port 0
 
         // connect sensors
-        ArmLimit = hwmap.get(TouchSensor.class, "ArmLimit");
+        SliderLimit = hwmap.get(TouchSensor.class, "ArmLimit");
+        ArmLimit = hwmap.get(TouchSensor.class, "SliderLimit");
         PixelDetector = hwmap.get(ColorSensor.class, "PixelDetector");
 
         //imu

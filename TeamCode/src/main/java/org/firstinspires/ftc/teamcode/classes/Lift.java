@@ -192,6 +192,11 @@ public class Lift extends Robot{
     @Override
     public void Init() {    // makes the lift go down until it reaches the limit switch and resets encoders
 
+        while (!LiftLimit.isPressed())
+        {
+            MoveLift(0.1f);
+        }
+
         liftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         liftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
