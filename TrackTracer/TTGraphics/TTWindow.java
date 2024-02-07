@@ -1,8 +1,16 @@
+
+
 import java.awt.*;
 import javax.swing.*;
 
-public class Window {
+public class TTWindow {
 
+    public TTWindow()
+    {
+
+    }
+
+    
     public static void CreateWindow()
     {
         JFrame frame = new JFrame("TrackTracer");
