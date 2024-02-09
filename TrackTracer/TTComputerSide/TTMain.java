@@ -1,3 +1,4 @@
+package TTComputerSide;
 import TTComputerSide.TTGraphics.TTWindow;
 
 public class TTMain {
