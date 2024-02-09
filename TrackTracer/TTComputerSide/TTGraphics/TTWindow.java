@@ -1,4 +1,4 @@
-package TTGraphics;
+package TTComputerSide.TTGraphics;
 
 import java.awt.*;
 import javax.swing.*;

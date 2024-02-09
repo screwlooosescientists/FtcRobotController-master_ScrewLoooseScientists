@@ -1,4 +1,4 @@
-import TTGraphics.TTWindow;
+import TTComputerSide.TTGraphics.TTWindow;
 
 public class TTMain {
     
