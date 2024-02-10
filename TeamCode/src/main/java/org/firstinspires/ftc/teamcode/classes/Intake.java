@@ -47,18 +47,18 @@ public class Intake extends Robot{
         {
 
             IntakeMotor.setPower(0.6);
-            KlapServo.setPosition(0.26);
+            KlapServo.setPosition(1);
         }
         else
         if(Down && TwoPixels == false)
         {
             IntakeMotor.setPower(0.6);
-            KlapServo.setPosition(0.26);
+            KlapServo.setPosition(1);
         }
         else
         {
             IntakeMotor.setPower(0);
-            KlapServo.setPosition(0.73);
+            KlapServo.setPosition(0.5);
         }
 
     }

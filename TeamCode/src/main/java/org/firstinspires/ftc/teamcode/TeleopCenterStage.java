@@ -48,9 +48,9 @@ public class TeleopCenterStage extends LinearOpMode {
         telemetry.update();
 
         CenterstageDriveTrain.Init();
-        Arm.Init();
-       // Arm.CalibrateHome();
-        intake.Init();
+        //Arm.Init();
+       //Arm.CalibrateHome();
+        //intake.Init();
         PlaneRelease.setPosition(1);
         waitForStart();
         Runtime.reset();
@@ -69,6 +69,19 @@ public class TeleopCenterStage extends LinearOpMode {
             else {    CenterstageDriveTrain.DriveRobotCenter(x1, y1, x2);
 
             }
+
+            if(!SliderLimit.isPressed())
+            {
+                Slider.MoveLift(gamepad2.right_stick_y);
+            }
+            else
+                if(gamepad2.right_stick_y > 0)
+                {
+                    Slider.MoveLift(gamepad2.right_stick_y);
+                }
+                else
+                    Slider.MoveLift(0);
+
             Slider.MoveLift(gamepad2.right_stick_y);
             Arm.MoveLift(gamepad2.left_stick_y);
 

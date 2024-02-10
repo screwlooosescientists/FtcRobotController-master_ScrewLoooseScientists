@@ -16,6 +16,8 @@ public class Lift extends Robot{
     double liftLength;
     double HeightPerEncoderTick;
     double AnglePerEncoderTick;
+    double LiftAngle;
+    double LastLiftAngle;
     float speed;
     double previousLiftHeight;
     public double previousTime;
@@ -164,6 +166,19 @@ public class Lift extends Robot{
 
         return value;
 
+    }
+
+    public double getAngle()
+    {
+        return liftMotor.getCurrentPosition() * AnglePerEncoderTick;
+    }
+
+    public double GetDeltaAngle(double currentAngle)
+    {
+        double DeltaAngle;
+        DeltaAngle = currentAngle - LiftAngle;
+        LastLiftAngle = currentAngle;
+        return DeltaAngle;
     }
 
     public float compensate(float alpha,float A_x,float A_y, float r)
