@@ -94,6 +94,7 @@ public class AutonomousCenterstage extends LinearOpMode {
 
         telemetry.addData("Status: ", "Waiting for start...");
         telemetry.update();
+        // hier blijven herkennen tot start
         waitForStart();
         // Code after start is pressed------------------------------------------------------------------------------------
 
