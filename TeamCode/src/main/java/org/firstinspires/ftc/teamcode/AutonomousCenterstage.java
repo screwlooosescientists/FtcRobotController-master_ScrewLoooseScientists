@@ -70,6 +70,7 @@ public class AutonomousCenterstage extends LinearOpMode {
         telemetry.addData("StartPos: ", StartPosString);
         telemetry.update();
 
+
         //Autonomous selecting pos
         while(!gamepad1.back && !isStopRequested())
         {
@@ -86,7 +87,7 @@ public class AutonomousCenterstage extends LinearOpMode {
                 sPos = StartPos.RED2;
 
             telemetry.addData("Status: ", "Selecting start pos...");
-            telemetry.addData("StartPos: ", StartPosString);
+            telemetry.addData("StartPos: ", sPos);
             telemetry.update();
 
         }
@@ -97,13 +98,13 @@ public class AutonomousCenterstage extends LinearOpMode {
         // Code after start is pressed------------------------------------------------------------------------------------
 
 
-
-
             while(!isStopRequested()) {
                 Position TeamEllementPos = Cam1.GetTfodLocation(Cam1.HighestRecon());
                 telemetry.addData("pos X: ", TeamEllementPos.x);
                 telemetry.addData("pos Y: ", TeamEllementPos.y);
                 telemetry.update();
+
+                //if( positie, 1, 2 of 3; rijd naar de juiste plek
             }
 
 
