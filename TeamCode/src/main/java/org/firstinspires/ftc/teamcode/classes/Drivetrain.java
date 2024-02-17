@@ -202,10 +202,10 @@ public class Drivetrain extends Robot  {
 //        Orientation angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZXY, AngleUnit.RADIANS );
   //      double heading =angles.firstAngle;
 
-        robotOrientation = imu.getRobotYawPitchRollAngles();
+        double heading = (((encoderX2.getCurrentPosition() * Math.PI * wheelDiameter / odometryDiameter)  + (encoderX1.getCurrentPosition() * Math.PI * wheelDiameter / odometryDiameter))) / (2* verticalEncoderOfset);
 
 
-       return robotOrientation.getYaw(AngleUnit.RADIANS);
+       return heading;
     }
 
     public double getDeltaOrientation(double curretnOrientation)

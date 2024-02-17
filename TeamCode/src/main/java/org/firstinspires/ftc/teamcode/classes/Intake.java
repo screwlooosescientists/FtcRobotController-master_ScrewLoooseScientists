@@ -38,7 +38,7 @@ public class Intake extends Robot{
     {
 
 
-        if(PixelDetector.argb() > 1)
+        if(PixelDetector.argb() > 80)
             TwoPixels = false;
         else
             TwoPixels = true;
@@ -46,19 +46,19 @@ public class Intake extends Robot{
         if(Down && TwoPixels)
         {
 
-            IntakeMotor.setPower(0.6);
-            KlapServo.setPosition(1);
+            IntakeMotor.setPower(-1);
+            KlapServo.setPosition(0.55);
         }
         else
         if(Down && TwoPixels == false)
         {
-            IntakeMotor.setPower(0.6);
-            KlapServo.setPosition(1);
+            IntakeMotor.setPower(1);
+            KlapServo.setPosition(0.55);
         }
         else
         {
             IntakeMotor.setPower(0);
-            KlapServo.setPosition(0.5);
+            KlapServo.setPosition(1);
         }
 
     }
@@ -77,7 +77,7 @@ public class Intake extends Robot{
     {
 
 
-        KlapServo.setPosition(0.73);
+        KlapServo.setPosition(1);
     }
     
 }

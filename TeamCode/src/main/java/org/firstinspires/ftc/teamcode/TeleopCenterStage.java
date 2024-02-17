@@ -40,7 +40,7 @@ public class TeleopCenterStage extends LinearOpMode {
 
         CenterstageDriveTrain = new Drivetrain(imu, lfront, lback, rfront, rback,  rfront , rback, lfront  , 5.7f ,1,8192f,20.9f,7.6f); // TODO add odometry pod stuf
         Arm = new Lift(armMotor, Lift.LiftType.SinlejointedArm, 100, 32, 0, 0.00755190904, true, 1, ArmLimit);
-        Slider = new Lift(SliderMotor, Lift.LiftType.LinearSlides, 100, 32, 0.0025, 0, true, 1, SliderLimit);
+        Slider = new Lift(SliderMotor, Lift.LiftType.LinearSlides, 100, 32, 0.0025, 0, false, 1, SliderLimit);
         intake = new Intake(IntakeMotor, KlapServo, BakjeKlep,  PixelDetector);
 
 
@@ -50,11 +50,11 @@ public class TeleopCenterStage extends LinearOpMode {
         CenterstageDriveTrain.Init();
         //Arm.Init();
        //Arm.CalibrateHome();
-        //intake.Init();
+        intake.Init();
         PlaneRelease.setPosition(1);
         waitForStart();
         Runtime.reset();
-        KlapServo.setPosition(0.26);
+        KlapServo.setPosition(0.55);
         Slider.Init();
         while(opModeIsActive())
         {
@@ -124,14 +124,17 @@ public class TeleopCenterStage extends LinearOpMode {
   //Test telemetry----------------------------------------------------------------------------
             CenterstageDriveTrain.getPosition();
 
-            //CenterstageDriveTrain.DriveToPoint(new Node(0, 0, 0, true));
-
+            if(gamepad1.y) {
+                CenterstageDriveTrain.DriveToPoint(new Node(0, 0, 0, true));
+            }
 
  //Telemetry---------------------------------------------------------------------------------
             telemetry.addData("status", "running" );
             telemetry.addData("pixels: ", intake.TwoPixels);
+            telemetry.addData("EncoderPosX1:", CenterstageDriveTrain.encoderX1.getCurrentPosition());
+            telemetry.addData("EncoderPosX2:", CenterstageDriveTrain.encoderX2.getCurrentPosition());
             telemetry.addData("Position: ", CenterstageDriveTrain.RobotPositionX + ", " + CenterstageDriveTrain.RobotPositionY);
-            telemetry.addData("DeltaOrientation", CenterstageDriveTrain.getDeltaOrientation(CenterstageDriveTrain.getOrientation()));
+            telemetry.addData("Orientation", (CenterstageDriveTrain.getOrientation() / Math.PI));
             telemetry.addData("is pressed: ", ArmLimit.isPressed());
             telemetry.update();
         }
