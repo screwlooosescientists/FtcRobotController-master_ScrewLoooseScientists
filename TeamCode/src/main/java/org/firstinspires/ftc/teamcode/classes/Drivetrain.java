@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.teamcode.classes.extra.Node;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
+import org.firstinspires.ftc.teamcode.classes.extra.PID;
 
 import static org.firstinspires.ftc.teamcode.classes.Hardware.*;
 
@@ -44,6 +45,9 @@ public class Drivetrain extends Robot  {
 
     public float  odometryDiameter, verticalEncoderOfset, horizontalEncoderOfset; // for odometry
 
+    public PID drivePIDX = new PID(0, 0, 0, 0, timer.time());
+    public PID drivePIDY = new PID(0, 0, 0, 0, timer.time());
+    public PID drivePIDAngle = new PID(0, 0, 0, 0, timer.time());
 
 
     // variables for robot orientation
@@ -110,12 +114,31 @@ public class Drivetrain extends Robot  {
     public void DriveToPoint(Node Target)
     {   // get data needed for calculations
 
-        deltaTime = (float) timer.milliseconds() - lastTime;
-        float deltaDistance = distance - lastDistance;
+
+       double x = drivePIDX.pidValue(RobotPositionX, Target.X, timer.time());
+       double y = drivePIDY.pidValue(RobotPositionY, Target.Y, timer.time());
+       double angle = drivePIDAngle.pidValue(getOrientation(), Target.TargetHeading, timer.time());
+
+        double deltaX = RobotPositionX - Target.X;
+        double deltaY = RobotPositionY - Target.Y;
+
+        distance = (float)Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+
+       double xRot = (x * Math.cos(getOrientation()) - (y * Math.sin(getOrientation())));
+       double yRot = (x * Math.cos(getOrientation()) + (y * Math.sin(getOrientation())));
+
+        double frontLeftPower = (-xRot + yRot + angle);
+        double backLeftPower = (-xRot - yRot + angle);
+        double frontRightPower = (-xRot - yRot - angle);
+        double backRightPower = (-xRot + yRot - angle);
+
+        double  denominator = Math.max(Math.abs(frontLeftPower), Math.max(Math.abs(backLeftPower), Math.max(Math.abs(frontRightPower), Math.max( Math.abs(backRightPower), 1))));
+        Lfront.setPower(frontLeftPower / denominator);
+        Lback.setPower(backLeftPower / denominator);
+        Rfront.setPower(frontRightPower / denominator);
+        Rback.setPower(backRightPower / denominator);
 
 
-        //gets delta time
-        lastTime = (float) timer.milliseconds();
         /*
 
         deltaTime = (float) timer.milliseconds() - lastTime;    // get delta time
@@ -167,17 +190,22 @@ public class Drivetrain extends Robot  {
 
     public void followPath(Node[] path, float pathAcuracy, float orientation)
     {
-/*
-        for(int i = 0; i < path.lengt; i++)
+
+        for(int i = 0; i < path.length; i++)
         {
-            while(distance > pathAcuracy)   //TODO (add al conditions such as orientation and actions in between points) drive to point until conditionts met to go to the next point
+            while(distance > path[i].acuracy)   //TODO (add al conditions such as orientation and actions in between points) drive to point until conditionts met to go to the next point
             {
-                DriveToPoint(path[index]);
+
+                if(path[i].HasCondition == true)
+                {
+
+                }
+                DriveToPoint(path[i]);
             }
             
             
         }
-*/
+
     }
 
     void getEncoderDeltas()
@@ -198,7 +226,7 @@ public class Drivetrain extends Robot  {
     public double getOrientation()
     {
         //Function for getting the robot orientation using the gyro
-        //TODO get robot orientation by using the encoder calculations.
+
 //        Orientation angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZXY, AngleUnit.RADIANS );
   //      double heading =angles.firstAngle;
 
