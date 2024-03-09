@@ -11,6 +11,7 @@ import org.firstinspires.ftc.teamcode.classes.Hardware;
 import org.firstinspires.ftc.teamcode.classes.Intake;
 import org.firstinspires.ftc.teamcode.classes.Lift;
 import org.firstinspires.ftc.teamcode.classes.extra.Node;
+import org.firstinspires.ftc.teamcode.classes.extra.PID;
 
 import static org.firstinspires.ftc.teamcode.classes.Hardware.*;
 
@@ -20,14 +21,18 @@ public class TeleopCenterStage extends LinearOpMode {
     Hardware RobotHardware = new Hardware();
     TouchSensor none;
     public Drivetrain CenterstageDriveTrain;
+    public Drivetrain Powerplay;
     public Lift Slides;
     public Lift Arm;
+    public PID ArmPID;
     public Lift Slider;
     public Intake intake;
 
     public ElapsedTime Runtime = new ElapsedTime();
 
     float x1, y1, x2;
+
+    double arm_Target;
     boolean state = false;
 
     // todo: write your code here
@@ -38,11 +43,13 @@ public class TeleopCenterStage extends LinearOpMode {
         // hardware map reference
         RobotHardware.StartHardware(hardwareMap);
 
+
         CenterstageDriveTrain = new Drivetrain(imu, lfront, lback, rfront, rback,  rfront , rback, lfront  , 5.7f ,1,8192f,20.9f,7.6f); // TODO add odometry pod stuf
         Arm = new Lift(armMotor, Lift.LiftType.SinlejointedArm, 100, 32, 0, 0.00755190904, true, 1, ArmLimit);
         Slider = new Lift(SliderMotor, Lift.LiftType.LinearSlides, 100, 32, 0.0025, 0, false, 1, SliderLimit);
         intake = new Intake(IntakeMotor, KlapServo, BakjeKlep,  PixelDetector);
 
+        ArmPID = new PID(-1, -0.001, -0, 0, Runtime.seconds());
 
         telemetry.addData("status", "waiting for start");
         telemetry.update();
@@ -83,8 +90,25 @@ public class TeleopCenterStage extends LinearOpMode {
                     Slider.MoveLift(0);
 
             Slider.MoveLift(gamepad2.right_stick_y);
-            Arm.MoveLift(gamepad2.left_stick_y);
 
+            if(gamepad2.left_stick_y != 0)
+            {
+                Arm.MoveLift(gamepad2.left_stick_y * 0.7f);
+                arm_Target = Arm.getAngle();
+            }
+           else{
+
+
+              Arm.MoveLift((float)ArmPID.pidValue(Arm.getAngle(),arm_Target, Runtime.seconds()));
+                /*telemetry.addData("elapsed time", Runtime.seconds());
+                telemetry.addData("pid value", ArmPID.pidValue(Arm.getAngle(),arm_Target, Runtime.seconds()));
+                telemetry.addData("p", (float)ArmPID.P(arm_Target, Arm.getAngle()));
+                telemetry.addData("i", (float)ArmPID.I(arm_Target, Arm.getAngle(), Runtime.seconds()));
+                telemetry.addData("d", (float)ArmPID.D(arm_Target, Arm.getAngle(), Runtime.seconds()));
+                telemetry.addData("dt", ArmPID.DeltaTime(Runtime.seconds()));
+                */
+
+            }
 //reseting gyro----------------------------------------------------------------------------------------
             if (gamepad1.dpad_left && gamepad1.b)
                 CenterstageDriveTrain.imu.resetYaw();
@@ -130,12 +154,13 @@ public class TeleopCenterStage extends LinearOpMode {
 
  //Telemetry---------------------------------------------------------------------------------
             telemetry.addData("status", "running" );
-            telemetry.addData("pixels: ", intake.TwoPixels);
-            telemetry.addData("EncoderPosX1:", CenterstageDriveTrain.encoderX1.getCurrentPosition());
-            telemetry.addData("EncoderPosX2:", CenterstageDriveTrain.encoderX2.getCurrentPosition());
-            telemetry.addData("Position: ", CenterstageDriveTrain.RobotPositionX + ", " + CenterstageDriveTrain.RobotPositionY);
-            telemetry.addData("Orientation", (CenterstageDriveTrain.getOrientation() / Math.PI));
-            telemetry.addData("is pressed: ", ArmLimit.isPressed());
+            //telemetry.addData("pixels: ", intake.TwoPixels);
+            //telemetry.addData("EncoderPosX1:", CenterstageDriveTrain.encoderX1.getCurrentPosition());
+           // telemetry.addData("EncoderPosX2:", CenterstageDriveTrain.encoderX2.getCurrentPosition());
+            //telemetry.addData("Position: ", CenterstageDriveTrain.RobotPositionX + ", " + CenterstageDriveTrain.RobotPositionY);
+           // telemetry.addData("Orientation", (CenterstageDriveTrain.getOrientation() / Math.PI));
+            //telemetry.addData("is pressed: ", ArmLimit.isPressed());
+            telemetry.addData("Arm angle", (Arm.getAngle() / Math.PI) * 180);
             telemetry.update();
         }
     }

@@ -46,7 +46,7 @@ public class Intake extends Robot{
         if(Down && TwoPixels)
         {
 
-            IntakeMotor.setPower(-1);
+            IntakeMotor.setPower(1);
             KlapServo.setPosition(0.55);
         }
         else

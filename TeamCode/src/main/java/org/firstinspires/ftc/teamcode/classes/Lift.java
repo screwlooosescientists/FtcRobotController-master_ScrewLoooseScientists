@@ -170,7 +170,7 @@ public class Lift extends Robot{
 
     public double getAngle()
     {
-        return liftMotor.getCurrentPosition() * AnglePerEncoderTick;
+        return -liftMotor.getCurrentPosition() * AnglePerEncoderTick;
     }
 
     public double GetDeltaAngle(double currentAngle)

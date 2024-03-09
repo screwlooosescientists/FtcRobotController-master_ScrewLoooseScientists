@@ -20,7 +20,9 @@ public class PID {
 
     //usefull vars
     public double lastError;
+    public double i;
 
+    public double dt;
 
     public PID(double kp, double ki, double kd, double targetValue, double CurrentTime) //Constructor to create an pid loop :)
     {
@@ -31,44 +33,62 @@ public class PID {
         this.CurrentTime = CurrentTime;
     }
 
-    public double error()
+    public double error(double targetValue, double currentval)
     {
         return targetValue - currentval;
     }
 
-    public double deltaError()
+
+    public double deltaError(double t, double c)
     {
-        double dE = error() - lastError;
-        lastError = error();
+        double dE = error(t, c) - lastError;
+        lastError = error(t, c);
         return dE;
     }
 
-    public double DeltaTime()
-    {   double dT = CurrentTime - LastTime;
+    public double DeltaTime(double ct)
+    {   CurrentTime = ct;
+        double dT = CurrentTime - LastTime;
         LastTime = CurrentTime;
+
         return dT;
     }
 
-    public double P()
+    public double P(double t, double c)
     {
-        return  error() * kp;
+        return  error(t, c) * kp;
     }
 
-    public double I(double currentTime)
+    public double I(double t, double c, double ct)
     {
-        return error() * ki * DeltaTime();
+        i = i + (error(t, c) * ki * dt);
+        return i;
     }
 
-    public double D(double currentTime)
+    public double D(double t, double c, double ct)
     {
-        return (deltaError() / DeltaTime()) * kd;
+        return (deltaError(t, c) / dt) * kd;
     }
 
     public double pidValue(double currentVal, double targetValue,  double currentTime)
     {
-        this.currentval = currentVal;
-        this.targetValue = targetValue;
-        return P() + I(currentTime) + D(currentTime);
+
+        double p, i , d;
+        dt = DeltaTime(currentTime);
+        p = P(targetValue, currentVal) ;
+        i = I(targetValue, currentVal, currentTime);
+        d = D(targetValue, currentVal, currentTime);
+        double pid;
+
+
+            pid = p + i + d;
+
+
+
+        //return P(targetValue, currentVal) ;
+        //return I(targetValue, currentVal, currentTime) ;
+        return pid;
+        //return P(targetValue, currentVal) + I(targetValue, currentVal, currentTime) + D(targetValue, currentVal, currentTime);
     }
 
 
