@@ -8,6 +8,7 @@ This class handels the odometry for the tracktracer tool.
 evertything is either in radiance or mm
  */
 
+//TODO find the bugs in the old code and fix them
 public class Odometry implements Runnable {
 
     public DcMotor encoderX1, encoderX2, encoderY;
