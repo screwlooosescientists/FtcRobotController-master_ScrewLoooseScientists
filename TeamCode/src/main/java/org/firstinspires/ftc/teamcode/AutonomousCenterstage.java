@@ -10,6 +10,7 @@ import org.firstinspires.ftc.teamcode.classes.Drivetrain;
 import org.firstinspires.ftc.teamcode.classes.Hardware;
 import org.firstinspires.ftc.teamcode.classes.Lift;
 import org.firstinspires.ftc.teamcode.classes.Camera;
+import org.firstinspires.ftc.teamcode.classes.Odometry;
 import org.firstinspires.ftc.teamcode.classes.extra.GethPath;
 import org.firstinspires.ftc.teamcode.classes.extra.Position;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -26,6 +27,8 @@ public class AutonomousCenterstage extends LinearOpMode {
     Hardware RobotHardware = new Hardware();
     TouchSensor None;
     public Drivetrain CenterstageDriveTrain;
+    Odometry odo;
+
     public Lift Slides;
     public Lift Arm;
     public Lift Slider;
@@ -40,7 +43,7 @@ public class AutonomousCenterstage extends LinearOpMode {
     {
         RobotHardware.StartHardware(hardwareMap);
 
-        CenterstageDriveTrain = new Drivetrain(imu, lfront, lback, rfront, rback, lfront, lback, rfront, 1,1,1,1,1); // TODO add odometry pod stuf
+        CenterstageDriveTrain = new Drivetrain(imu, lfront, lback, rfront, rback);
         Arm = new Lift(armMotor, Lift.LiftType.SinlejointedArm, 100, 32, 0, 0.00755190904, false, 1, ArmLimit);
         Slider = new Lift(SliderMotor, Lift.LiftType.LinearSlides, 100, 32, 1, 0, true, 1, ArmLimit);
         Cam1 = new Camera(cam, vsPortal, AprilProcessor, TfodProcessor);
@@ -93,21 +96,24 @@ public class AutonomousCenterstage extends LinearOpMode {
 
         }
 
+        odo = new Odometry(rfront, rback, lfront, 20.9, 7.6, 5.7, 1, 8192);
+
         telemetry.addData("Status: ", "Waiting for start...");
         telemetry.update();
         // hier blijven herkennen tot start
         waitForStart();
         // Code after start is pressed------------------------------------------------------------------------------------
 
+        while(!isStopRequested())
+        {
+            CenterstageDriveTrain.setRobotPose(odo.RobotPositionX, odo.RobotPositionY, odo.getOrientation());
+            telemetry.addData("x:", CenterstageDriveTrain.RobotPositionX);
+            telemetry.addData("Y:", CenterstageDriveTrain.RobotPositionY);
+            telemetry.addData("Heading:", CenterstageDriveTrain.RobotHeading);
+            telemetry.update();
+        }
+        Odometry.StopRequested = true;
 
-            while(!isStopRequested()) {
-                Position TeamEllementPos = Cam1.GetTfodLocation(Cam1.HighestRecon());
-                telemetry.addData("pos X: ", TeamEllementPos.x);
-                telemetry.addData("pos Y: ", TeamEllementPos.y);
-                telemetry.update();
-
-                //if( positie, 1, 2 of 3; rijd naar de juiste plek
-            }
 
 
 

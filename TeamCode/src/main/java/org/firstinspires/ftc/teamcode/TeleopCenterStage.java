@@ -43,8 +43,8 @@ public class TeleopCenterStage extends LinearOpMode {
         // hardware map reference
         RobotHardware.StartHardware(hardwareMap);
 
-
-        CenterstageDriveTrain = new Drivetrain(imu, lfront, lback, rfront, rback,  rfront , rback, lfront  , 5.7f ,1,8192f,20.9f,7.6f); // TODO add odometry pod stuf
+        // odo specs:  5.7f ,1,8192f,20.9f,7.6f
+        CenterstageDriveTrain = new Drivetrain(imu, lfront, lback, rfront, rback);
         Arm = new Lift(armMotor, Lift.LiftType.SinlejointedArm, 100, 32, 0, 0.00755190904, true, 1, ArmLimit);
         Slider = new Lift(SliderMotor, Lift.LiftType.LinearSlides, 100, 32, 0.0025, 0, false, 1, SliderLimit);
         intake = new Intake(IntakeMotor, KlapServo, BakjeKlep,  PixelDetector);
@@ -146,11 +146,9 @@ public class TeleopCenterStage extends LinearOpMode {
                 PlaneRelease.setPosition(0);
 
   //Test telemetry----------------------------------------------------------------------------
-            CenterstageDriveTrain.getPosition();
 
-            if(gamepad1.y) {
-                CenterstageDriveTrain.DriveToPoint(new Node(0, 0, 0, true, 0));
-            }
+
+
 
  //Telemetry---------------------------------------------------------------------------------
             telemetry.addData("status", "running" );
