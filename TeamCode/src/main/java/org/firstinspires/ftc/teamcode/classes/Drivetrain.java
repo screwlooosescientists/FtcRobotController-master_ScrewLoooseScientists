@@ -45,9 +45,9 @@ public class Drivetrain extends Robot  {
 
     public float  odometryDiameter, verticalEncoderOfset, horizontalEncoderOfset; // for odometry
 
-    public PID drivePIDX = new PID(0, 0, 0, 0, timer.time());
-    public PID drivePIDY = new PID(0, 0, 0, 0, timer.time());
-    public PID drivePIDAngle = new PID(0, 0, 0, 0, timer.time());
+    public PID drivePIDX = new PID(0, 0, 0, 0, timer.seconds());
+    public PID drivePIDY = new PID(0, 0, 0, 0, timer.seconds());
+    public PID drivePIDAngle = new PID(0, 0, 0, 0, timer.seconds());
 
 
     // variables for robot orientation
