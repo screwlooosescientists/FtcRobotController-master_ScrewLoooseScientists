@@ -71,6 +71,7 @@ public class TeleopCenterStage extends LinearOpMode {
 
             //CenterstageDriveTrain.DriveFieldCenter(x1, y1, x2);
 
+            //dit stuk evt aanpassen @faris
             if(gamepad1.right_trigger> 0.3)
             CenterstageDriveTrain.DriveRobotCenter(x1/3, y1/3, x2/3);
             else {    CenterstageDriveTrain.DriveRobotCenter(x1, y1, x2);
@@ -93,7 +94,7 @@ public class TeleopCenterStage extends LinearOpMode {
 
             if(gamepad2.left_stick_y != 0)
             {
-                Arm.MoveLift(gamepad2.left_stick_y * 0.7f);
+                Arm.MoveLift(gamepad2.left_stick_y * 0.9f);
                 arm_Target = Arm.getAngle();
             }
            else{
